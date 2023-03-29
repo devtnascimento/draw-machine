@@ -1,0 +1,8 @@
+/home/devtnascimento/workspace/cpprojects/draw-machine/build/CMakeFiles/draw-machine.dir
+/home/devtnascimento/workspace/cpprojects/draw-machine/build/CMakeFiles/edit_cache.dir
+/home/devtnascimento/workspace/cpprojects/draw-machine/build/CMakeFiles/rebuild_cache.dir
+/home/devtnascimento/workspace/cpprojects/draw-machine/build/glad/CMakeFiles/edit_cache.dir
+/home/devtnascimento/workspace/cpprojects/draw-machine/build/glad/CMakeFiles/rebuild_cache.dir
+/home/devtnascimento/workspace/cpprojects/draw-machine/build/primitives/CMakeFiles/primitives.dir
+/home/devtnascimento/workspace/cpprojects/draw-machine/build/primitives/CMakeFiles/edit_cache.dir
+/home/devtnascimento/workspace/cpprojects/draw-machine/build/primitives/CMakeFiles/rebuild_cache.dir
