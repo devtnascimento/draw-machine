@@ -3,28 +3,41 @@
 #include <vector>
 #include "window.cpp"
 #include "primitives/Triangle.cpp"
+#include "primitives/drawable.cpp"
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 using namespace std;
 
 int main(){
 
-  Window window = Window(0, 0, 400, 400);
+    Window window = Window(400, 400);
 
-  vector <float> vertices {
-  -0.5f, -0.5f, 0.0f,
-   0.5f, -0.5f, 0.0f,
-   0.0f,  0.5f, 0.0f
-  };
+    float vertices[] = {
+            -0.5f, -0.5f, 0.0f,
+            0.5f, -0.5f, 0.0f,
+            0.0f,  0.5f, 0.0f
+    };
 
-  string vs_path = "../shaders/vertex.glsl";
-  string fs_path = "../shaders/fragment.glsl";
+    cout << fs::current_path() << endl;
+    string vs_path = "../src/shaders/vertex.glsl";
+    string fs_path = "../src/shaders/fragment.glsl";
+
+    if (!window.init())
+        return -1;
+
+    vector<Drawable*> drawables;
+    drawables.push_back(new Triangle(vertices, vs_path, fs_path));
+
+    for (auto drawable : drawables){
+        drawable->getLog();
+    }
+
+    int control_flow = not_infinity;
+    window.event_loop(drawables, control_flow);
 
 
-  if (!window.init())
-    return -1;
-
-  Triangle t = Triangle(vertices, vs_path, fs_path);
-  window.event_loop();
 
 
   return 0;

@@ -24,7 +24,7 @@ add_library(
 target_compile_features(
   project_options
   INTERFACE
-    cxx_std_20
+    cxx_std_23
 )
 
 add_subdirectory(primitives)
