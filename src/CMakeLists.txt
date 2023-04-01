@@ -31,7 +31,7 @@ target_compile_features(
 )
 
 add_subdirectory(primitives)
-add_executable(draw-machine window.cpp glad.c primitives/Triangle.cpp primitives/drawable.cpp primitives/shape.cpp include/primitives/shape.h)
+add_executable(draw-machine window.cpp glad.c primitives/Triangle.cpp primitives/drawable.cpp primitives/shape.cpp include/primitives/shape.h include/primitives/drawable.h)
 
 target_sources(
   draw-machine

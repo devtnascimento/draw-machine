@@ -33,7 +33,7 @@ class Triangle : public Drawable {
 
         void draw() override {
             if (this->context == nullptr)
-                cout << "invalid context" << endl;
+                cout << "Invalid context" << endl;
             glUseProgram(this->program);
             glBindVertexArray(this->VAO);
             glDrawArrays(GL_TRIANGLES, this->start_index, 3);
@@ -100,11 +100,14 @@ class Triangle : public Drawable {
                                                "}\n\0";
 
             this->VS = glCreateShader(GL_VERTEX_SHADER);
-            glShaderSource(this->VS, 1, &vertexShaderSource, nullptr);
+
+            const char* vsrc = this->vs_src.c_str();
+            glShaderSource(this->VS, 1, &vsrc, nullptr);
             glCompileShader(this->VS);
 
+            const char* fsrc = this->fs_src.c_str();
             this->FS = glCreateShader(GL_FRAGMENT_SHADER);
-            glShaderSource(this->FS, 1, &fragmentShaderSource, nullptr);
+            glShaderSource(this->FS, 1, &fsrc, nullptr);
             glCompileShader(this->FS);
 
             this->setLog(this->VS, "VS_SHADER");
