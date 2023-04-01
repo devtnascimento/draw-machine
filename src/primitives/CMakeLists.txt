@@ -2,12 +2,12 @@ cmake_minimum_required(VERSION 3.15)
 
 project(primitives)
 
-add_library(primitives shape.cpp shape.h)
+add_library(primitives shape.cpp ../include/primitives/shape.h)
 
 target_sources(
   primitives
   PUBLIC
-    Triangle.hpp
+        ../include/primitives/Triangle.h
   PRIVATE
     Triangle.cpp
 )

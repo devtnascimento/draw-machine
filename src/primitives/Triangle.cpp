@@ -29,8 +29,6 @@ class Triangle : public Drawable {
             this->start_index = 0;
             this->loc = 0;
             this->context = glfwGetCurrentContext();
-            if (!this->vs_path.empty() && !this->fs_path.empty())
-                this->build();
         }
 
         void draw() override {
@@ -39,6 +37,22 @@ class Triangle : public Drawable {
             glUseProgram(this->program);
             glBindVertexArray(this->VAO);
             glDrawArrays(GL_TRIANGLES, this->start_index, 3);
+        }
+
+        void build() override {
+            this->getShadersSources();
+            this->compileShaders();
+            this->linkProgram();
+            glGenVertexArrays(1, &this->VAO);
+            glGenBuffers(1, &this->VBO);
+            glBindVertexArray(this->VAO);
+            glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+
+            glBufferData(GL_ARRAY_BUFFER, this->size, this->vertices, GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), nullptr);
+
+            glEnableVertexAttribArray(0);
+            glBindVertexArray(0);
         }
 
     protected:
@@ -67,23 +81,6 @@ class Triangle : public Drawable {
 
             this->vs_src = std::move(vs_buffer.str());
             this->fs_src = std::move(fs_buffer.str());
-
-        }
-
-        virtual void build() {
-            this->getShadersSources();
-            this->compileShaders();
-            this->linkProgram();
-            glGenVertexArrays(1, &this->VAO);
-            glGenBuffers(1, &this->VBO);
-            glBindVertexArray(this->VAO);
-            glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-
-            glBufferData(GL_ARRAY_BUFFER, this->size, this->vertices, GL_STATIC_DRAW);
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), nullptr);
-
-            glEnableVertexAttribArray(0);
-            glBindVertexArray(0);
         }
 
         void compileShaders(){

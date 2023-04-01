@@ -58,10 +58,7 @@ class Window {
           glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
           glClear(GL_COLOR_BUFFER_BIT);
           for (auto &drawable : drawables) {
-              auto* triangle = dynamic_cast<Triangle*>(drawable);
-              glUseProgram(triangle->program);
-              glBindVertexArray(triangle->VAO);
-              glDrawArrays(GL_TRIANGLES, 0, 3);
+              drawable->draw();
           }
           glfwSwapBuffers(window);
           glfwPollEvents();

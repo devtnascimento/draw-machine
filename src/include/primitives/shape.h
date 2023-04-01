@@ -10,8 +10,8 @@
 #define DRAW_MACHINE_SHAPE_H
 
 namespace primitive {
-
     class Shape : public Triangle {
+    public:
         Shape(
                 float* vertices,
                 int v_size,
@@ -24,14 +24,15 @@ namespace primitive {
                      std::move(vs_path),
                      std::move(fs_path)){};
 
+        void build() override {};
         void draw() override {};
         void getLog() override {};
         void setLog(const unsigned int&, const std::string&) override {};
 
-        virtual ~Shape() = delete;
     private:
         unsigned int* indices{};
         int i_size{};
+        unsigned int EBO{};
 
 
 
