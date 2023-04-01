@@ -12,7 +12,7 @@ using namespace std;
 
 int main(){
 
-    Window window = Window(400, 400);
+    Window window = Window(800, 800);
 
     float vertices[] = {
             -0.5f, -0.5f, 0.0f,
@@ -20,25 +20,25 @@ int main(){
             0.0f,  0.5f, 0.0f
     };
 
-    cout << fs::current_path() << endl;
-    string vs_path = "../src/shaders/vertex.glsl";
-    string fs_path = "../src/shaders/fragment.glsl";
+    cout << "CURRENT_PATH: " << fs::current_path() << endl;
+    string vs_path = "../shaders/vertex.glsl";
+    string fs_path = "../shaders/fragment.glsl";
 
     if (!window.init())
         return -1;
 
     vector<Drawable*> drawables;
-    drawables.push_back(new Triangle(vertices, vs_path, fs_path));
+    Drawable* t = new Triangle(vertices, sizeof(vertices), vs_path, fs_path);
+    drawables.emplace_back(t);
+
+    t->getLog();
 
     for (auto drawable : drawables){
         drawable->getLog();
     }
 
-    int control_flow = not_infinity;
+    int control_flow = is_infinity;
     window.event_loop(drawables, control_flow);
-
-
-
 
   return 0;
 }

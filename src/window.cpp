@@ -1,12 +1,9 @@
-#include "glad/glad.h"
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <GL/gl.h>
 #include <vector>
 #include <iostream>
-#include <functional>
-#include <tuple>
-#include <utility>
 #import "primitives/drawable.cpp"
+#import "primitives/Triangle.cpp"
 
 #define is_infinity (-1)
 #define not_infinity (2)
@@ -57,23 +54,19 @@ class Window {
 
   void event_loop(vector<Drawable*> &drawables, int &control_flow){
       unsigned int cont = 0;
-      bool condition;
-      while(!glfwWindowShouldClose(window) && condition){
-          condition = (control_flow == is_infinity) || (cont < control_flow);
+      while(!glfwWindowShouldClose(window)){
           glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
           glClear(GL_COLOR_BUFFER_BIT);
-          if (glad_glDrawArrays == nullptr)
-              cout << "Nao Carregou!" << endl;
-          drawables[0]->draw();
-          if (glad_glDrawArrays != nullptr)
-              cout << "Carregou!" << endl;
-          //for (auto &drawable : drawables) {
-          //    drawable->draw();
-          //}
+          for (auto &drawable : drawables) {
+              auto* triangle = dynamic_cast<Triangle*>(drawable);
+              glUseProgram(triangle->program);
+              glBindVertexArray(triangle->VAO);
+              glDrawArrays(GL_TRIANGLES, 0, 3);
+          }
           glfwSwapBuffers(window);
           glfwPollEvents();
-          if (cont < control_flow)
-            cont++;
+          if (control_flow != is_infinity)
+              break;
       }
   }
 

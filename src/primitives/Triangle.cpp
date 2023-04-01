@@ -1,10 +1,11 @@
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <sstream>
 #include <utility>
 #include <vector>
 #include <string>
 #include <fstream>
 #include <iostream>
-#include "../glad/glad.h"
 #include <functional>
 #include "drawable.cpp"
 
@@ -16,38 +17,36 @@ class Triangle : public Drawable {
     public:
         GLuint VBO{}, VBA{}, VAO{}, loc{}, program{}, VS{}, FS{};
         GLint start_index;
-        vector <const char*> shaders_src;
+        string vs_src, fs_src;
         vector <string> log;
+        GLFWwindow* context;
 
-        Triangle(const float* vertices, string vs_path, string fs_path){
+        Triangle(float* vertices, int size,  string vs_path, string fs_path) : vertices(0) {
             this->vertices = vertices;
+            this->size = size;
             this->vs_path = std::move(vs_path);
             this->fs_path = std::move(fs_path);
             this->start_index = 0;
+            this->loc = 0;
+            this->context = glfwGetCurrentContext();
             if (!this->vs_path.empty() && !this->fs_path.empty())
                 this->build();
         }
 
         void draw() override {
-            cout << "[" << __func__ << "] vao: " << this->VAO << endl;
+            if (this->context == nullptr)
+                cout << "invalid context" << endl;
             glUseProgram(this->program);
             glBindVertexArray(this->VAO);
             glDrawArrays(GL_TRIANGLES, this->start_index, 3);
         }
 
-        const char* getVsSource(){
-            return this->getShadersSources()[0];
-        }
-
-        const char* getFsSource(){
-            return this->getShadersSources()[1];
-        }
-
     private:
-        const float* vertices;
+        float* vertices;
+        unsigned int size;
         string vs_path, fs_path;
 
-        vector <const char*> getShadersSources(){
+        void getShadersSources(){
             fstream vs_file;
             fstream fs_file;
             vs_file.open(this->vs_path);
@@ -66,26 +65,29 @@ class Triangle : public Drawable {
             vs_file.close();
             fs_file.close();
 
-            string vs_str = std::move(vs_buffer.str());
-            string fs_str = std::move(fs_buffer.str());
+            this->vs_src = std::move(vs_buffer.str());
+            this->fs_src = std::move(fs_buffer.str());
 
-            return vector {vs_str.c_str(), fs_str.c_str()};
         }
 
-        void build(){
-            glGenBuffers(1, &this->VBO);
-            glGenVertexArrays(1, &this->VAO);
-            glBindVertexArray(this->VAO);
-            glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(this->vertices), this->vertices, GL_STATIC_DRAW);
-            this->shaders_src = this->getShadersSources();
+        void build() {
+            this->getShadersSources();
             this->compileShaders();
             this->linkProgram();
-            glVertexAttribPointer(this->loc, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)0);
+            glGenVertexArrays(1, &this->VAO);
+            glGenBuffers(1, &this->VBO);
+            glBindVertexArray(this->VAO);
+            glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+
+            glBufferData(GL_ARRAY_BUFFER, this->size, this->vertices, GL_STATIC_DRAW);
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), nullptr);
+
             glEnableVertexAttribArray(0);
+            glBindVertexArray(0);
         }
 
         void compileShaders(){
+
             const char *vertexShaderSource = "#version 330 core\n"
                                              "layout (location = 0) in vec3 aPos;\n"
                                              "void main()\n"
@@ -93,35 +95,33 @@ class Triangle : public Drawable {
                                              "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
                                              "}\0";
 
-            this->VS = glCreateShader(GL_VERTEX_SHADER);
-            glShaderSource(this->VS, 1,  &vertexShaderSource, nullptr);
-            glCompileShader(GL_VERTEX_SHADER);
-
             const char *fragmentShaderSource = "#version 330 core\n"
-                                             "out vec4 FragColor\n"
-                                             "void main()\n"
-                                             "{\n"
-                                             "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-                                             "}\0";
+                                               "out vec4 FragColor;\n"
+                                               "void main()\n"
+                                               "{\n"
+                                               "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+                                               "}\n\0";
+
+            this->VS = glCreateShader(GL_VERTEX_SHADER);
+            glShaderSource(this->VS, 1, &vertexShaderSource, nullptr);
+            glCompileShader(this->VS);
 
             this->FS = glCreateShader(GL_FRAGMENT_SHADER);
             glShaderSource(this->FS, 1, &fragmentShaderSource, nullptr);
-            glCompileShader(GL_FRAGMENT_SHADER);
+            glCompileShader(this->FS);
 
-            cout <<"[" << __func__ << "]" << this->VS << endl;
-            int sucess = 0;
-            this->setLog(this->VS, "SHADER");
-            this->setLog(this->FS, "SHADER");
+            this->setLog(this->VS, "VS_SHADER");
+            this->setLog(this->FS, "FS_SHADER");
         }
 
-        void deleteShaders() const {
+        void deleteShaders() {
             glDeleteShader(this->VS);
             glDeleteShader(this->FS);
+            this->VS = 0;
+            this->FS = 0;
         }
 
         void linkProgram(){
-            cout << "[" << __func__ << "] VS: " << this->VS << endl;
-            cout << "[" << __func__ << "] FS: " << this->FS << endl;
             this->program = glCreateProgram();
             glAttachShader(this->program, this->VS);
             glAttachShader(this->program, this->FS);
@@ -149,10 +149,11 @@ class Triangle : public Drawable {
                         this->log.emplace_back(s + log_);
                     for (const auto& err : this->log)
                         cout << err << endl;
-                    throw runtime_error("Coud not link program");
+                    cerr << "Coud not link program" << this->program <<
+                            " for shaders (" << this->VS << "," << this->FS <<")" << endl;
                 }
             }
-            else if (log_type == "SHADER"){
+            else if (log_type == "VS_SHADER" || log_type == "FS_SHADER"){
                 cout << object << endl;
                 glGetShaderiv(object, GL_COMPILE_STATUS, &success);
                 if (!success){
@@ -160,8 +161,7 @@ class Triangle : public Drawable {
                     glGetShaderiv(object, GL_INFO_LOG_LENGTH, &log_size);
                     cout << "logsize: " << log_size << endl;
                     GLenum error = glGetError();
-                    cout << error << endl;
-                    while (error != GL_NO_ERROR) {
+                    if (error != GL_NO_ERROR) {
                         switch (error) {
                             case GL_INVALID_ENUM:
                                 std::cerr << "OpenGL error: Invalid enum" << std::endl;
@@ -181,12 +181,10 @@ class Triangle : public Drawable {
                             case GL_OUT_OF_MEMORY:
                                 std::cerr << "OpenGL error: Out of memory" << std::endl;
                                 break;
-                                // Add more cases for other error codes as needed...
                             default:
                                 std::cerr << "Unknown OpenGL error" << std::endl;
                                 break;
                         }
-                        error = glGetError();
                     }
                     GLchar infoLog[log_size];
                     glGetShaderInfoLog(object, log_size, nullptr, infoLog);
@@ -195,8 +193,7 @@ class Triangle : public Drawable {
                     this->log.emplace_back(s + log_);
                     for (const auto& err : this->log)
                         cout << err << endl;
-                    cout << "glGetShaderInfoLog return status code: " << success << endl;
-                    throw runtime_error("Could not compile shader program");
+                    throw runtime_error("Could not compile shader");
                 }
             }
         }
