@@ -4,6 +4,7 @@
 #include "window.cpp"
 #include "primitives/Triangle.cpp"
 #include "primitives/drawable.cpp"
+#include "primitives/shape.h"
 #include <filesystem>
 
 namespace fs = std::filesystem;
@@ -28,16 +29,16 @@ int main(){
         return -1;
 
     vector<Drawable*> drawables;
-    Drawable* t = new Triangle(vertices, sizeof(vertices), vs_path, fs_path);
-    drawables.emplace_back(t);
-
-    t->getLog();
+    drawables.emplace_back(new Triangle(vertices, sizeof(vertices), vs_path, fs_path));
 
     for (auto drawable : drawables){
         drawable->getLog();
     }
 
     int control_flow = is_infinity;
+
+
+
     window.event_loop(drawables, control_flow);
 
   return 0;

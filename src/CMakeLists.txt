@@ -16,12 +16,12 @@ include_directories(${OPENGL_INCLUDE_DIRS})
 add_library(
   project_options
   INTERFACE
-)
+        primitives/shape.cpp primitives/shape.h)
 
 add_library(
         glad
         INTERFACE
-)
+        primitives/shape.cpp primitives/shape.h)
 
 # set option c++20 version
 target_compile_features(
@@ -31,7 +31,7 @@ target_compile_features(
 )
 
 add_subdirectory(primitives)
-add_executable(draw-machine window.cpp glad.c primitives/Triangle.cpp primitives/drawable.cpp)
+add_executable(draw-machine window.cpp glad.c primitives/Triangle.cpp primitives/drawable.cpp primitives/shape.cpp primitives/shape.h)
 
 target_sources(
   draw-machine

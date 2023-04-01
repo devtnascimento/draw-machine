@@ -21,7 +21,7 @@ class Triangle : public Drawable {
         vector <string> log;
         GLFWwindow* context;
 
-        Triangle(float* vertices, int size,  string vs_path, string fs_path) : vertices(0) {
+        Triangle(float* vertices, int size,  string vs_path, string fs_path){
             this->vertices = vertices;
             this->size = size;
             this->vs_path = std::move(vs_path);
@@ -41,7 +41,7 @@ class Triangle : public Drawable {
             glDrawArrays(GL_TRIANGLES, this->start_index, 3);
         }
 
-    private:
+    protected:
         float* vertices;
         unsigned int size;
         string vs_path, fs_path;
@@ -70,7 +70,7 @@ class Triangle : public Drawable {
 
         }
 
-        void build() {
+        virtual void build() {
             this->getShadersSources();
             this->compileShaders();
             this->linkProgram();
