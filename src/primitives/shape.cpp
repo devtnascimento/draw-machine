@@ -1,24 +1,30 @@
-#include <algorithm>
 #include "Triangle.cpp"
+#include <cmath>
+#include <boost/multi_array.hpp>
 
 using namespace std;
 
 namespace primitive {
 
-    class Shape : public Triangle {
+    template <size_t v_n, size_t i_n>
+    class Shape : public Triangle<v_n> {
     public:
+        int color_loc{};
+        unsigned int stride {};
+        unsigned int offset {};
+        boost::multi_array<float, 2> attributes {};
         Shape(
-                float *vertices,
-                int v_size,
-                unsigned int* indices,
-                int i_size,
-                string vs_path,
-                string fs_path
-        ) : Triangle(
+                auto vertices,
+                size_t v_size,
+                auto indices,
+                size_t i_size,
+                const string& vs_path,
+                const string& fs_path
+        ) : Triangle <v_n> (
                 vertices,
                 v_size,
-                std::move(vs_path),
-                std::move(fs_path)
+                vs_path,
+                fs_path
         ) {
             this->EBO = 0;
             this->indices = indices;
@@ -32,36 +38,48 @@ namespace primitive {
             this->compileShaders();
             this->linkProgram();
 
+//            this->color_loc = glGetUniformLocation(this->program, "ourColor");
+//            if (this->color_loc == -1) {
+//                cerr << "[BUILD ERROR] COULD NOT GET UNIFORM LOCATION" << endl;
+//                throw;
+//            }
             glGenVertexArrays(1, &this->VAO);
             glGenBuffers(1, &this->VBO);
             glGenBuffers(1, &this->EBO);
             glBindVertexArray(this->VAO);
 
-            cout << "size: " << this->size << endl;
             glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-            glBufferData(GL_ARRAY_BUFFER, this->size, this->vertices, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, this->size, this->vertices.data(), GL_STATIC_DRAW);
 
-            cout << "i_size: " << this->i_size << endl;
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->i_size, this->indices, GL_STATIC_DRAW);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->i_size, this->indices.data(), GL_STATIC_DRAW);
 
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), nullptr);
+            // position attribute
+            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), nullptr);
             glEnableVertexAttribArray(0);
+
+            // color attribute
+            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6*sizeof(float), (void*)(3*sizeof(float)));
+            glEnableVertexAttribArray(1);
 
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glBindVertexArray(0);
         }
 
         void draw() override {
+            auto timeValue = static_cast<float>(glfwGetTime());
+            float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
             glUseProgram(this->program);
+            glUniform4f(this->color_loc, 0.0f, greenValue, 0.0f, 1.0f);
             glBindVertexArray(this->VAO);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
         }
 
+
     private:
-        int i_size;
-        unsigned int* indices;
-        unsigned int EBO;
+        size_t i_size{};
+        boost::array<unsigned int, i_n> indices;
+        unsigned int EBO{};
 
     };
 

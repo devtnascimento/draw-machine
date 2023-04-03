@@ -8,26 +8,27 @@
 #include <iostream>
 #include <functional>
 #include "drawable.cpp"
+#include <boost/array.hpp>
+#include <algorithm>
 
 
 using namespace std;
 
+template <size_t v_size>
 class Triangle : public Drawable {
 
     public:
-        GLuint VBO{}, VBA{}, VAO{}, loc{}, program{}, VS{}, FS{};
-        GLint start_index;
+        GLuint VBO{}, VAO{}, program{}, VS{}, FS{};
+        GLint start_index{};
         string vs_src, fs_src;
         vector <string> log;
-        GLFWwindow* context;
+        GLFWwindow* context{};
 
-        Triangle(float* vertices, int size,  string vs_path, string fs_path){
-            this->vertices = vertices;
+        Triangle(auto vertices, size_t size,  const string& vs_path, const string& fs_path) : vertices(vertices) {
             this->size = size;
-            this->vs_path = std::move(vs_path);
-            this->fs_path = std::move(fs_path);
+            this->vs_path = vs_path;
+            this->fs_path = fs_path;
             this->start_index = 0;
-            this->loc = 0;
             this->context = glfwGetCurrentContext();
         }
 
@@ -48,7 +49,7 @@ class Triangle : public Drawable {
             glBindVertexArray(this->VAO);
             glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
 
-            glBufferData(GL_ARRAY_BUFFER, this->size, this->vertices, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, this->size, this->vertices.data(), GL_STATIC_DRAW);
             glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), nullptr);
 
             glEnableVertexAttribArray(0);
@@ -56,8 +57,8 @@ class Triangle : public Drawable {
         }
 
     protected:
-        float* vertices;
-        unsigned int size;
+        boost::array<const float, v_size> vertices {};
+        unsigned int size{};
         string vs_path, fs_path;
 
         void getShadersSources(){
@@ -84,21 +85,6 @@ class Triangle : public Drawable {
         }
 
         void compileShaders(){
-
-            const char *vertexShaderSource = "#version 330 core\n"
-                                             "layout (location = 0) in vec3 aPos;\n"
-                                             "void main()\n"
-                                             "{\n"
-                                             "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-                                             "}\0";
-
-            const char *fragmentShaderSource = "#version 330 core\n"
-                                               "out vec4 FragColor;\n"
-                                               "void main()\n"
-                                               "{\n"
-                                               "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-                                               "}\n\0";
-
             this->VS = glCreateShader(GL_VERTEX_SHADER);
 
             const char* vsrc = this->vs_src.c_str();
