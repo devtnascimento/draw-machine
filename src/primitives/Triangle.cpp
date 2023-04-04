@@ -6,10 +6,8 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include <functional>
 #include "drawable.cpp"
-#include <boost/array.hpp>
-#include <algorithm>
+#include <array>
 
 
 using namespace std;
@@ -57,7 +55,7 @@ class Triangle : public Drawable {
         }
 
     protected:
-        boost::array<const float, v_size> vertices {};
+        array<float, v_size> vertices {};
         unsigned int size{};
         string vs_path, fs_path;
 
