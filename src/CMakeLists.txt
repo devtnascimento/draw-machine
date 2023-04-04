@@ -33,7 +33,7 @@ target_compile_features(
 )
 add_subdirectory(utils)
 add_subdirectory(primitives)
-add_executable(draw-machine window.cpp glad.c primitives/Triangle.cpp primitives/drawable.cpp primitives/shape.cpp include/primitives/shape.h include/primitives/drawable.h utils/shaders.cpp utils/Texture.cpp include/external/Texture.h include/external/stb_image.h utils/vertices.cpp include/external/vertices.h ../sketch/transformations.cpp algorithms/transformations.h)
+add_executable(draw-machine main.cpp window.cpp glad.c primitives/Triangle.cpp primitives/drawable.cpp primitives/shape.cpp include/primitives/shape.h include/primitives/drawable.h utils/shaders.cpp utils/Texture.cpp include/external/Texture.h include/external/stb_image.h utils/vertices.cpp include/external/vertices.h)
 
 target_sources(
   draw-machine
