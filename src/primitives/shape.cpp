@@ -1,109 +1,142 @@
 #include "Triangle.cpp"
 #include <cmath>
-#include <array>
 #include "../utils/Texture.cpp"
+#include "../utils/transforms.cpp"
 
 
 using namespace std;
 
+typedef Eigen::Matrix<unsigned int, Eigen::Dynamic, 3, Eigen::RowMajor> Indices;
+typedef Eigen::Matrix<float, 4, 4, Eigen::RowMajor> Transform;
+
 namespace primitive {
 
-    struct Attribute{
-        unsigned int index, size, stride, offset;
-        bool normalized;
-        Attribute(unsigned int index, unsigned int size, bool normalized, unsigned int stride, unsigned int offset)
-                : index(index), size(size), normalized(normalized), stride(stride), offset(offset) {}
-    };
+    class Shape : public Triangle, public Movable{
+        private:
+            GLsizeiptr i_size{};
+            Indices indices{};
+            unsigned int EBO{};
+            GLsizei stride{};
 
-    template <size_t v_n, size_t i_n>
-    class Shape : public Triangle<v_n> {
-    public:
-        int color_loc{};
-        unsigned int stride{};
-        unsigned int offset{};
-        utils::Texture* texture1{};
-        utils::Texture* texture2{};
+        public:
+            unsigned int offset{};
+            utils::Texture* texture1{};
+            utils::Texture* texture2{};
+            Transform T{};
+            Eigen::Vector3f center{};
 
-        Shape(
-                auto vertices,
-                size_t v_size,
-                auto indices,
-                size_t i_size,
-                const string& vs_path,
-                const string& fs_path
-        ) : Triangle <v_n> (
-                vertices,
-                v_size,
-                vs_path,
-                fs_path
-        ) {
-            this->EBO = 0;
-            this->indices = indices;
-            this->i_size = i_size;
-            this->texture1 = new utils::Texture("container", GL_RGB);
-            this->texture2 = new utils::Texture("awesomeface", GL_RGBA, true);
-        }
+            Shape(const Vertices& vertices, const Indices& indices,
+                  const string& vs_path, const string& fs_path) {
 
-        void build () override {
-
-            this->getShadersSources();
-            this->compileShaders();
-            this->linkProgram();
-
-            this->color_loc = glGetUniformLocation(this->program, "ourTexture");
-            if (this->color_loc == -1) {
-                cerr << "[BUILD] COULD NOT GET UNIFORM LOCATION" << endl;
+                this->vertices = vertices;
+                this->size = static_cast<GLsizeiptr>(vertices.size()*sizeof(float));
+                this->vs_path = vs_path;
+                this->fs_path = fs_path;
+                this->start_index = 0;
+                this->context = glfwGetCurrentContext();
+                this->stride = static_cast<GLsizei>(this->vertices.cols()*sizeof(float));
+                this->indices = indices;
+                this->i_size = static_cast<GLsizeiptr>(indices.size()*sizeof(int));
+                this->texture1 = new utils::Texture("container", GL_RGB);
+                this->texture2 = new utils::Texture("awesomeface", GL_RGBA, true);
+                this->T = Transform::Identity();
+                this->center = this->vertices.block(0, 0, this->vertices.rows(), 3).colwise().mean();
             }
 
-            glGenVertexArrays(1, &this->VAO);
-            glGenBuffers(1, &this->VBO);
-            glGenBuffers(1, &this->EBO);
-            glBindVertexArray(this->VAO);
+            void build () override {
 
-            glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
-            glBufferData(GL_ARRAY_BUFFER, this->size, this->vertices.data(), GL_STATIC_DRAW);
+                this->getShadersSources();
+                this->compileShaders();
+                this->linkProgram();
 
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->i_size, this->indices.data(), GL_STATIC_DRAW);
+                cout << this->T << endl;
+                glGenVertexArrays(1, &this->VAO);
+                glGenBuffers(1, &this->VBO);
+                glGenBuffers(1, &this->EBO);
 
-            // position attribute
-            glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), nullptr);
-            glEnableVertexAttribArray(0);
+                glBindVertexArray(this->VAO);
 
-            // color attribute
-            glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), (void*)(3*sizeof(float)));
-            glEnableVertexAttribArray(1);
+                glBindBuffer(GL_ARRAY_BUFFER, this->VBO);
+                glBufferData(GL_ARRAY_BUFFER, this->size, vertices.data(), GL_STATIC_DRAW);
 
-            // texture attribute
-            glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-            glEnableVertexAttribArray(2);
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->EBO);
+                glBufferData(GL_ELEMENT_ARRAY_BUFFER, this->i_size, this->indices.data(), GL_STATIC_DRAW);
 
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-            glBindVertexArray(0);
+                // position attribute
+                glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, this->stride, nullptr);
+                glEnableVertexAttribArray(0);
 
-            glUseProgram(this->program);
-            glUniform1i(glGetUniformLocation(this->program, "texture1"), 0);
-            glUniform1i(glGetUniformLocation(this->program, "texture2"), 1);
+                // texture attribute
+                glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, this->stride, (void*)(3*sizeof(float)));
+                glEnableVertexAttribArray(1);
 
-        }
+                glBindBuffer(GL_ARRAY_BUFFER, 0);
+                glBindVertexArray(0);
 
-        void draw() override {
+                glUseProgram(this->program);
+                glUniform1i(glGetUniformLocation(this->program, "texture1"), 0);
+                glUniform1i(glGetUniformLocation(this->program, "texture2"), 1);
+            }
 
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, this->texture1->id);
-            glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, this->texture2->id);
+            void draw() override {
 
-            glUseProgram(this->program);
-            glBindVertexArray(this->VAO);
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-        }
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, this->texture1->id);
+                glActiveTexture(GL_TEXTURE1);
+                glBindTexture(GL_TEXTURE_2D, this->texture2->id);
 
+                this->translate(Eigen::Vector3f(0.5f, -0.5f, 0.0f));
+                float angle = 45.0f;
+                this->rotate(angle, Eigen::Vector3f(0.0f, 0.0f, 1.0f));
 
-    private:
-        size_t i_size{};
-        array<unsigned int, i_n> indices;
-        unsigned int EBO{};
-    };
+                glUseProgram(this->program);
+                GLint transformLoc = glGetUniformLocation(this->program, "transform");
+                glUniformMatrix4fv(transformLoc, 1, GL_FALSE, this->T.data());
+                glBindVertexArray(this->VAO);
+                glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+            }
+
+            void translate(const Eigen::Vector3f& point) override {
+
+                Eigen::Affine3f transform(this->T);
+                Eigen::Translation3f translation(point);
+                transform *= translation;
+                this->T = transform.matrix();
+            }
+
+            void rotate(float angle, Eigen::Vector3f axis) override {
+
+                angle = static_cast<float>(angle * M_PI / 180.0f);
+                Eigen::Quaternionf rotation = Eigen::Quaternionf(Eigen::AngleAxisf(angle, axis));
+                Eigen::Affine3f transform(this->T);
+                transform.rotate(rotation);
+                this->T = transform.matrix();
+            }
+
+            void rotate(float angle) override {
+
+                angle = static_cast<float>(angle * M_PI / 180.0f);
+                auto rotation = Eigen::Quaternionf(Eigen::AngleAxisf(angle, this->center.normalized()));
+                Eigen::Affine3f transform(this->T);
+                transform.rotate(rotation);
+                this->T = transform.matrix();
+            }
+
+            void move() override {
+
+                for (int i=0; i < this->vertices.rows(); i++){
+                    Eigen::Vector4f new_vertex;
+                    new_vertex = this->T * Eigen::Vector4f(this->vertices(i, 0),
+                                                           this->vertices(i, 1),
+                                                           this->vertices(i, 2),
+                                                           1.0f
+                    );
+                    this->vertices(i, 0) = new_vertex[0];
+                    this->vertices(i, 1) = new_vertex[1];
+                    this->vertices(i, 2) = new_vertex[2];
+                    this->vertices = this->vertices.normalized();
+                }
+            }
+        };
 
 } // primitive

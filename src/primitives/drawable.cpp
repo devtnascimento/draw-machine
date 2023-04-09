@@ -1,6 +1,6 @@
 #include <string>
 
-class Drawable{
+class Drawable {
   public:
     virtual void build() = 0;
     virtual void draw() = 0;

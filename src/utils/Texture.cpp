@@ -78,7 +78,7 @@ namespace utils {
             if (this->data) {
                 glTexImage2D(GL_TEXTURE_2D,
                              0,
-                             this->format,
+                             GL_RGB,
                              this->width,
                              this->height,
                              0,

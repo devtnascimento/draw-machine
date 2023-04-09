@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 
 project(utils)
 
-add_library(utils shaders.cpp Texture.cpp)
+add_library(utils shaders.cpp Texture.cpp transforms.cpp)
 
 target_sources(
         utils
@@ -17,6 +17,9 @@ target_include_directories(
         .
         ../include
 )
+
+find_package(Eigen3 REQUIRED)
+
 link_directories(/usr/lib)
 target_link_libraries(
         utils
@@ -25,6 +28,7 @@ target_link_libraries(
         glad
         external
         project_options
+        Eigen3::Eigen
 )
 
 

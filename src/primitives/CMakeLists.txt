@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 
 project(primitives)
 
-add_library(primitives shape.cpp ../include/primitives/shape.h drawable3D.cpp drawable3D.h)
+add_library(primitives shape.cpp ../include/primitives/shape.h drawable3D.cpp ../include/drawable3D.h)
 
 target_sources(
   primitives
@@ -19,6 +19,8 @@ target_include_directories(
         ../include
 )
 
+find_package(Eigen3 REQUIRED)
+
 target_link_libraries(    
   primitives
   PRIVATE
@@ -27,6 +29,7 @@ target_link_libraries(
         utils
         external
         project_options
+        Eigen3::Eigen
 )
 
 

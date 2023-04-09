@@ -5,6 +5,7 @@ project(draw-machine)
 # add packages
 find_package(OpenGL REQUIRED)
 find_package(glfw3 REQUIRED)
+find_package(Eigen3 REQUIRED)
 
 include_directories(${OPENGL_INCLUDE_DIRS})
 
@@ -61,6 +62,7 @@ target_link_libraries(
         project_options
         external
         utils
+        Eigen3::Eigen
 )
 
 

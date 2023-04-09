@@ -10,48 +10,76 @@
 #include <filesystem>
 #include "utils/vertices.cpp"
 #include <array>
-
-
-//#include <boost/algorithm/cxx17/for_each_n.hpp>
+#include <Eigen/Geometry>
 
 namespace fs = std::filesystem;
 
 using namespace std;
 
-namespace vtx = utils::vertex;
-
 int main(){
 
     Window window = Window(800, 800);
-
-
-    array<float, 32> vertices = {
-                      0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,
-                      0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,
-                      -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,
-                      -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f
+    float v[] = {
+            // positions          // texture coords
+            0.5f,  0.5f, 0.0f,   1.0f, 1.0f, // top right
+            0.5f, -0.5f, 0.0f,   1.0f, 0.0f, // bottom right
+            -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, // bottom left
+            -0.5f,  0.5f, 0.0f,   0.0f, 1.0f  // top left
     };
 
-    array<unsigned int, 6> indices {{
-                0, 1, 3,
-                1, 2, 3
-    }};
+    cout << "v: " << sizeof (v) << endl;
+
+    Vertices vertices(4, 5);
+    vertices  <<  0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
+                  0.5f,-0.5f, 0.0f, 1.0f, 0.0f,
+                 -0.5f,-0.5f, 0.0f, 0.0f, 0.0f,
+                 -0.5f, 0.5f, 0.0f, 0.0f, 1.0f;
+
+    for (int i=0; i < vertices.size(); i++) {
+        cout << vertices.data()[i] << " ";
+    }
+    cout << endl;
+    for (float i : v) {
+        cout << i << " ";
+    }
+    cout << endl;
+    cout << "vertices: " << vertices.size()*sizeof(float) << endl;
+
+    Indices indices(2, 3);
+    indices <<  0, 1, 3,
+                1, 2, 3;
+
+    unsigned int idx[] = {
+            0, 1, 3, // first triangle
+            1, 2, 3  // second triangle
+    };
+
+    for (int i=0; i < indices.size(); i++) {
+        cout << indices.data()[i] << " ";
+    }
+    cout << endl;
+    for (unsigned int i : idx) {
+        cout << i << " ";
+    }
+    cout << endl;
+
 
     cout << "CURRENT_PATH: " << fs::current_path() << endl;
-    string vs_path = "../shaders/vertex3.glsl";
-    string fs_path = "../shaders/fragment3.glsl";
+    string vs_path = "../shaders/vertexT.glsl";
+    string fs_path = "../shaders/fragmentT.glsl";
 
     if (!window.init())
         return -1;
 
     vector<Drawable*> drawables;
 
-    constexpr size_t v_size = 32;
-    constexpr size_t i_size = 6;
+    auto* my_shape = new primitive::Shape(vertices, indices, vs_path, fs_path);
 
-    cout << "size: " << sizeof(vertices) << endl << "size data: " << sizeof(vertices.data()) << endl;
+    Eigen::Vector3f offset;
+    Eigen::Vector3f axis;
+    float angle = 45.0f;
 
-    drawables.push_back(new primitive::Shape<v_size, i_size>(vertices, sizeof(vertices), indices, sizeof(indices), vs_path, fs_path));
+    drawables.emplace_back(my_shape);
 
     for (auto drawable : drawables) {
         drawable->build();
