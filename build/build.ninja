@@ -12,7 +12,7 @@
 
 # =============================================================================
 # Project: draw-machine
-# Configurations: 
+# Configurations: Debug
 # =============================================================================
 
 #############################################
@@ -20,6 +20,11 @@
 
 ninja_required_version = 1.5
 
+
+#############################################
+# Set configuration variable for custom commands.
+
+CONFIGURATION = Debug
 # =============================================================================
 # Include auxiliary files.
 
@@ -34,7 +39,25 @@ include CMakeFiles/rules.ninja
 #############################################
 # Logical path to working directory; prefix for absolute paths.
 
-cmake_ninja_workdir = /home/devtnascimento/workspace/cpprojects/draw-machine/build/
+cmake_ninja_workdir = /home/devtnascimento/workspace/cpp/draw-machine/build/
+
+#############################################
+# Utility command for project_options
+
+build project_options: phony
+
+
+#############################################
+# Utility command for glad
+
+build glad: phony
+
+
+#############################################
+# Utility command for external
+
+build external: phony
+
 # =============================================================================
 # Object build statements for EXECUTABLE target draw-machine
 
@@ -42,27 +65,28 @@ cmake_ninja_workdir = /home/devtnascimento/workspace/cpprojects/draw-machine/bui
 #############################################
 # Order-only phony target for draw-machine
 
-build cmake_object_order_depends_target_draw-machine: phony || cmake_object_order_depends_target_primitives
+build cmake_object_order_depends_target_draw-machine: phony || cmake_object_order_depends_target_primitives cmake_object_order_depends_target_utils external glad project_options
 
-build CMakeFiles/draw-machine.dir/window.cpp.o: CXX_COMPILER__draw-machine_unscanned_ /home/devtnascimento/workspace/cpprojects/draw-machine/src/window.cpp || cmake_object_order_depends_target_draw-machine
-  DEP_FILE = CMakeFiles/draw-machine.dir/window.cpp.o.d
-  FLAGS = -std=gnu++20
-  INCLUDES = -I/home/devtnascimento/workspace/cpprojects/draw-machine/src/glad -I/home/devtnascimento/workspace/cpprojects/draw-machine/src/primitives -I/home/devtnascimento/workspace/cpprojects/draw-machine/src/primitives/../glad
+build CMakeFiles/draw-machine.dir/src/glad.c.o: C_COMPILER__draw-machine_unscanned_Debug /home/devtnascimento/workspace/cpp/draw-machine/src/glad.c || cmake_object_order_depends_target_draw-machine
+  DEP_FILE = CMakeFiles/draw-machine.dir/src/glad.c.o.d
+  FLAGS = -g
+  INCLUDES = -I/home/devtnascimento/workspace/cpp/draw-machine/include -I/home/devtnascimento/workspace/cpp/draw-machine/primitives/../include -I/home/devtnascimento/workspace/cpp/draw-machine/utils/. -I/home/devtnascimento/workspace/cpp/draw-machine/utils/../include -isystem /usr/include/eigen3
   OBJECT_DIR = CMakeFiles/draw-machine.dir
-  OBJECT_FILE_DIR = CMakeFiles/draw-machine.dir
+  OBJECT_FILE_DIR = CMakeFiles/draw-machine.dir/src
 
-build CMakeFiles/draw-machine.dir/main.cpp.o: CXX_COMPILER__draw-machine_unscanned_ /home/devtnascimento/workspace/cpprojects/draw-machine/src/main.cpp || cmake_object_order_depends_target_draw-machine
-  DEP_FILE = CMakeFiles/draw-machine.dir/main.cpp.o.d
-  FLAGS = -std=gnu++20
-  INCLUDES = -I/home/devtnascimento/workspace/cpprojects/draw-machine/src/glad -I/home/devtnascimento/workspace/cpprojects/draw-machine/src/primitives -I/home/devtnascimento/workspace/cpprojects/draw-machine/src/primitives/../glad
+build CMakeFiles/draw-machine.dir/src/main.cpp.o: CXX_COMPILER__draw-machine_unscanned_Debug /home/devtnascimento/workspace/cpp/draw-machine/src/main.cpp || cmake_object_order_depends_target_draw-machine
+  DEP_FILE = CMakeFiles/draw-machine.dir/src/main.cpp.o.d
+  FLAGS = -g -std=gnu++2b
+  INCLUDES = -I/home/devtnascimento/workspace/cpp/draw-machine/include -I/home/devtnascimento/workspace/cpp/draw-machine/primitives/../include -I/home/devtnascimento/workspace/cpp/draw-machine/utils/. -I/home/devtnascimento/workspace/cpp/draw-machine/utils/../include -isystem /usr/include/eigen3
   OBJECT_DIR = CMakeFiles/draw-machine.dir
-  OBJECT_FILE_DIR = CMakeFiles/draw-machine.dir
+  OBJECT_FILE_DIR = CMakeFiles/draw-machine.dir/src
 
-build CMakeFiles/draw-machine.dir/glad.c.o: C_COMPILER__draw-machine_unscanned_ /home/devtnascimento/workspace/cpprojects/draw-machine/src/glad.c || cmake_object_order_depends_target_draw-machine
-  DEP_FILE = CMakeFiles/draw-machine.dir/glad.c.o.d
-  INCLUDES = -I/home/devtnascimento/workspace/cpprojects/draw-machine/src/glad -I/home/devtnascimento/workspace/cpprojects/draw-machine/src/primitives -I/home/devtnascimento/workspace/cpprojects/draw-machine/src/primitives/../glad
+build CMakeFiles/draw-machine.dir/src/window.cpp.o: CXX_COMPILER__draw-machine_unscanned_Debug /home/devtnascimento/workspace/cpp/draw-machine/src/window.cpp || cmake_object_order_depends_target_draw-machine
+  DEP_FILE = CMakeFiles/draw-machine.dir/src/window.cpp.o.d
+  FLAGS = -g -std=gnu++2b
+  INCLUDES = -I/home/devtnascimento/workspace/cpp/draw-machine/include -I/home/devtnascimento/workspace/cpp/draw-machine/primitives/../include -I/home/devtnascimento/workspace/cpp/draw-machine/utils/. -I/home/devtnascimento/workspace/cpp/draw-machine/utils/../include -isystem /usr/include/eigen3
   OBJECT_DIR = CMakeFiles/draw-machine.dir
-  OBJECT_FILE_DIR = CMakeFiles/draw-machine.dir
+  OBJECT_FILE_DIR = CMakeFiles/draw-machine.dir/src
 
 
 # =============================================================================
@@ -70,14 +94,15 @@ build CMakeFiles/draw-machine.dir/glad.c.o: C_COMPILER__draw-machine_unscanned_ 
 
 
 #############################################
-# Link the executable /home/devtnascimento/workspace/cpprojects/bin/draw-machine
+# Link the executable draw-machine
 
-build /home/devtnascimento/workspace/cpprojects/bin/draw-machine: CXX_EXECUTABLE_LINKER__draw-machine_ CMakeFiles/draw-machine.dir/window.cpp.o CMakeFiles/draw-machine.dir/main.cpp.o CMakeFiles/draw-machine.dir/glad.c.o | /usr/lib/libOpenGL.so /usr/lib/libGLX.so /usr/lib/libGLU.so /usr/lib/libglfw.so.3.3 primitives/libprimitives.a /usr/lib/libGLX.so /usr/lib/libOpenGL.so || primitives/libprimitives.a
-  LINK_LIBRARIES = /usr/lib/libOpenGL.so  /usr/lib/libGLX.so  /usr/lib/libGLU.so  /usr/lib/libglfw.so.3.3  primitives/libprimitives.a  /usr/lib/libGLX.so  /usr/lib/libOpenGL.so
+build draw-machine: CXX_EXECUTABLE_LINKER__draw-machine_Debug CMakeFiles/draw-machine.dir/src/glad.c.o CMakeFiles/draw-machine.dir/src/main.cpp.o CMakeFiles/draw-machine.dir/src/window.cpp.o | /usr/lib/libOpenGL.so /usr/lib/libGLX.so /usr/lib/libGLU.so /usr/lib/libglfw.so.3.3 primitives/libprimitives.a utils/libutils.a /usr/lib/libGLX.so /usr/lib/libOpenGL.so || external glad primitives/libprimitives.a project_options utils/libutils.a
+  FLAGS = -g
+  LINK_LIBRARIES = /usr/lib/libOpenGL.so  /usr/lib/libGLX.so  /usr/lib/libGLU.so  /usr/lib/libglfw.so.3.3  primitives/libprimitives.a  utils/libutils.a  /usr/lib/libGLX.so  /usr/lib/libOpenGL.so
   OBJECT_DIR = CMakeFiles/draw-machine.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_FILE = /home/devtnascimento/workspace/cpprojects/bin/draw-machine
+  TARGET_FILE = draw-machine
   TARGET_PDB = draw-machine.dbg
 
 
@@ -85,7 +110,7 @@ build /home/devtnascimento/workspace/cpprojects/bin/draw-machine: CXX_EXECUTABLE
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/devtnascimento/workspace/cpprojects/draw-machine/build && /home/devtnascimento/.asdf/installs/cmake/3.26.1/bin/ccmake -S/home/devtnascimento/workspace/cpprojects/draw-machine/src -B/home/devtnascimento/workspace/cpprojects/draw-machine/build
+  COMMAND = cd /home/devtnascimento/workspace/cpp/draw-machine/build && /usr/bin/ccmake -S/home/devtnascimento/workspace/cpp/draw-machine -B/home/devtnascimento/workspace/cpp/draw-machine/build
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -97,45 +122,182 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/devtnascimento/workspace/cpprojects/draw-machine/build && /home/devtnascimento/.asdf/installs/cmake/3.26.1/bin/cmake --regenerate-during-build -S/home/devtnascimento/workspace/cpprojects/draw-machine/src -B/home/devtnascimento/workspace/cpprojects/draw-machine/build
+  COMMAND = cd /home/devtnascimento/workspace/cpp/draw-machine/build && /usr/bin/cmake --regenerate-during-build -S/home/devtnascimento/workspace/cpp/draw-machine -B/home/devtnascimento/workspace/cpp/draw-machine/build
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
 
 build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 
+
+#############################################
+# Utility command for list_install_components
+
+build list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build CMakeFiles/install.util: CUSTOM_COMMAND all
+  COMMAND = cd /home/devtnascimento/workspace/cpp/draw-machine/build && /usr/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build install: phony CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build CMakeFiles/install/local.util: CUSTOM_COMMAND all
+  COMMAND = cd /home/devtnascimento/workspace/cpp/draw-machine/build && /usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build install/local: phony CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build CMakeFiles/install/strip.util: CUSTOM_COMMAND all
+  COMMAND = cd /home/devtnascimento/workspace/cpp/draw-machine/build && /usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build install/strip: phony CMakeFiles/install/strip.util
+
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
-# /home/devtnascimento/workspace/cpprojects/draw-machine/src/CMakeLists.txt
+# /home/devtnascimento/workspace/cpp/draw-machine/CMakeLists.txt
 # =============================================================================
+
+# =============================================================================
+# Object build statements for STATIC_LIBRARY target utils
+
+
+#############################################
+# Order-only phony target for utils
+
+build cmake_object_order_depends_target_utils: phony || external glad project_options
+
+build utils/CMakeFiles/utils.dir/movable.cpp.o: CXX_COMPILER__utils_unscanned_Debug /home/devtnascimento/workspace/cpp/draw-machine/utils/movable.cpp || cmake_object_order_depends_target_utils
+  DEP_FILE = utils/CMakeFiles/utils.dir/movable.cpp.o.d
+  FLAGS = -g -std=gnu++2b
+  INCLUDES = -I/home/devtnascimento/workspace/cpp/draw-machine/utils/. -I/home/devtnascimento/workspace/cpp/draw-machine/utils/../include -isystem /usr/include/eigen3
+  OBJECT_DIR = utils/CMakeFiles/utils.dir
+  OBJECT_FILE_DIR = utils/CMakeFiles/utils.dir
+
+build utils/CMakeFiles/utils.dir/shaders.cpp.o: CXX_COMPILER__utils_unscanned_Debug /home/devtnascimento/workspace/cpp/draw-machine/utils/shaders.cpp || cmake_object_order_depends_target_utils
+  DEP_FILE = utils/CMakeFiles/utils.dir/shaders.cpp.o.d
+  FLAGS = -g -std=gnu++2b
+  INCLUDES = -I/home/devtnascimento/workspace/cpp/draw-machine/utils/. -I/home/devtnascimento/workspace/cpp/draw-machine/utils/../include -isystem /usr/include/eigen3
+  OBJECT_DIR = utils/CMakeFiles/utils.dir
+  OBJECT_FILE_DIR = utils/CMakeFiles/utils.dir
+
+build utils/CMakeFiles/utils.dir/texture.cpp.o: CXX_COMPILER__utils_unscanned_Debug /home/devtnascimento/workspace/cpp/draw-machine/utils/texture.cpp || cmake_object_order_depends_target_utils
+  DEP_FILE = utils/CMakeFiles/utils.dir/texture.cpp.o.d
+  FLAGS = -g -std=gnu++2b
+  INCLUDES = -I/home/devtnascimento/workspace/cpp/draw-machine/utils/. -I/home/devtnascimento/workspace/cpp/draw-machine/utils/../include -isystem /usr/include/eigen3
+  OBJECT_DIR = utils/CMakeFiles/utils.dir
+  OBJECT_FILE_DIR = utils/CMakeFiles/utils.dir
+
+build utils/CMakeFiles/utils.dir/vertices.cpp.o: CXX_COMPILER__utils_unscanned_Debug /home/devtnascimento/workspace/cpp/draw-machine/utils/vertices.cpp || cmake_object_order_depends_target_utils
+  DEP_FILE = utils/CMakeFiles/utils.dir/vertices.cpp.o.d
+  FLAGS = -g -std=gnu++2b
+  INCLUDES = -I/home/devtnascimento/workspace/cpp/draw-machine/utils/. -I/home/devtnascimento/workspace/cpp/draw-machine/utils/../include -isystem /usr/include/eigen3
+  OBJECT_DIR = utils/CMakeFiles/utils.dir
+  OBJECT_FILE_DIR = utils/CMakeFiles/utils.dir
+
+
+# =============================================================================
+# Link build statements for STATIC_LIBRARY target utils
+
+
+#############################################
+# Link the static library utils/libutils.a
+
+build utils/libutils.a: CXX_STATIC_LIBRARY_LINKER__utils_Debug utils/CMakeFiles/utils.dir/movable.cpp.o utils/CMakeFiles/utils.dir/shaders.cpp.o utils/CMakeFiles/utils.dir/texture.cpp.o utils/CMakeFiles/utils.dir/vertices.cpp.o || external glad project_options
+  LANGUAGE_COMPILE_FLAGS = -g
+  OBJECT_DIR = utils/CMakeFiles/utils.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = utils/libutils.a
+  TARGET_PDB = utils.a.dbg
 
 
 #############################################
 # Utility command for edit_cache
 
-build glad/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/devtnascimento/workspace/cpprojects/draw-machine/build/glad && /home/devtnascimento/.asdf/installs/cmake/3.26.1/bin/ccmake -S/home/devtnascimento/workspace/cpprojects/draw-machine/src -B/home/devtnascimento/workspace/cpprojects/draw-machine/build
+build utils/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/devtnascimento/workspace/cpp/draw-machine/build/utils && /usr/bin/ccmake -S/home/devtnascimento/workspace/cpp/draw-machine -B/home/devtnascimento/workspace/cpp/draw-machine/build
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
 
-build glad/edit_cache: phony glad/CMakeFiles/edit_cache.util
+build utils/edit_cache: phony utils/CMakeFiles/edit_cache.util
 
 
 #############################################
 # Utility command for rebuild_cache
 
-build glad/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/devtnascimento/workspace/cpprojects/draw-machine/build/glad && /home/devtnascimento/.asdf/installs/cmake/3.26.1/bin/cmake --regenerate-during-build -S/home/devtnascimento/workspace/cpprojects/draw-machine/src -B/home/devtnascimento/workspace/cpprojects/draw-machine/build
+build utils/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd /home/devtnascimento/workspace/cpp/draw-machine/build/utils && /usr/bin/cmake --regenerate-during-build -S/home/devtnascimento/workspace/cpp/draw-machine -B/home/devtnascimento/workspace/cpp/draw-machine/build
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
 
-build glad/rebuild_cache: phony glad/CMakeFiles/rebuild_cache.util
+build utils/rebuild_cache: phony utils/CMakeFiles/rebuild_cache.util
+
+
+#############################################
+# Utility command for list_install_components
+
+build utils/list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build utils/CMakeFiles/install.util: CUSTOM_COMMAND utils/all
+  COMMAND = cd /home/devtnascimento/workspace/cpp/draw-machine/build/utils && /usr/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build utils/install: phony utils/CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build utils/CMakeFiles/install/local.util: CUSTOM_COMMAND utils/all
+  COMMAND = cd /home/devtnascimento/workspace/cpp/draw-machine/build/utils && /usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build utils/install/local: phony utils/CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build utils/CMakeFiles/install/strip.util: CUSTOM_COMMAND utils/all
+  COMMAND = cd /home/devtnascimento/workspace/cpp/draw-machine/build/utils && /usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build utils/install/strip: phony utils/CMakeFiles/install/strip.util
 
 # =============================================================================
 # Write statements declared in CMakeLists.txt:
-# /home/devtnascimento/workspace/cpprojects/draw-machine/src/CMakeLists.txt
+# /home/devtnascimento/workspace/cpp/draw-machine/CMakeLists.txt
 # =============================================================================
 
 # =============================================================================
@@ -145,12 +307,19 @@ build glad/rebuild_cache: phony glad/CMakeFiles/rebuild_cache.util
 #############################################
 # Order-only phony target for primitives
 
-build cmake_object_order_depends_target_primitives: phony || primitives/CMakeFiles/primitives.dir
+build cmake_object_order_depends_target_primitives: phony || cmake_object_order_depends_target_utils external glad project_options
 
-build primitives/CMakeFiles/primitives.dir/Triangle.cpp.o: CXX_COMPILER__primitives_unscanned_ /home/devtnascimento/workspace/cpprojects/draw-machine/src/primitives/Triangle.cpp || cmake_object_order_depends_target_primitives
-  DEP_FILE = primitives/CMakeFiles/primitives.dir/Triangle.cpp.o.d
-  FLAGS = -std=gnu++20
-  INCLUDES = -I/home/devtnascimento/workspace/cpprojects/draw-machine/src/primitives -I/home/devtnascimento/workspace/cpprojects/draw-machine/src/primitives/../glad
+build primitives/CMakeFiles/primitives.dir/shape.cpp.o: CXX_COMPILER__primitives_unscanned_Debug /home/devtnascimento/workspace/cpp/draw-machine/primitives/shape.cpp || cmake_object_order_depends_target_primitives
+  DEP_FILE = primitives/CMakeFiles/primitives.dir/shape.cpp.o.d
+  FLAGS = -g -std=gnu++2b
+  INCLUDES = -I/home/devtnascimento/workspace/cpp/draw-machine/primitives/../include -I/home/devtnascimento/workspace/cpp/draw-machine/utils/. -I/home/devtnascimento/workspace/cpp/draw-machine/utils/../include -isystem /usr/include/eigen3
+  OBJECT_DIR = primitives/CMakeFiles/primitives.dir
+  OBJECT_FILE_DIR = primitives/CMakeFiles/primitives.dir
+
+build primitives/CMakeFiles/primitives.dir/triangle.cpp.o: CXX_COMPILER__primitives_unscanned_Debug /home/devtnascimento/workspace/cpp/draw-machine/primitives/triangle.cpp || cmake_object_order_depends_target_primitives
+  DEP_FILE = primitives/CMakeFiles/primitives.dir/triangle.cpp.o.d
+  FLAGS = -g -std=gnu++2b
+  INCLUDES = -I/home/devtnascimento/workspace/cpp/draw-machine/primitives/../include -I/home/devtnascimento/workspace/cpp/draw-machine/utils/. -I/home/devtnascimento/workspace/cpp/draw-machine/utils/../include -isystem /usr/include/eigen3
   OBJECT_DIR = primitives/CMakeFiles/primitives.dir
   OBJECT_FILE_DIR = primitives/CMakeFiles/primitives.dir
 
@@ -162,7 +331,8 @@ build primitives/CMakeFiles/primitives.dir/Triangle.cpp.o: CXX_COMPILER__primiti
 #############################################
 # Link the static library primitives/libprimitives.a
 
-build primitives/libprimitives.a: CXX_STATIC_LIBRARY_LINKER__primitives_ primitives/CMakeFiles/primitives.dir/Triangle.cpp.o
+build primitives/libprimitives.a: CXX_STATIC_LIBRARY_LINKER__primitives_Debug primitives/CMakeFiles/primitives.dir/shape.cpp.o primitives/CMakeFiles/primitives.dir/triangle.cpp.o || external glad project_options utils/libutils.a
+  LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = primitives/CMakeFiles/primitives.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -174,7 +344,7 @@ build primitives/libprimitives.a: CXX_STATIC_LIBRARY_LINKER__primitives_ primiti
 # Utility command for edit_cache
 
 build primitives/CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/devtnascimento/workspace/cpprojects/draw-machine/build/primitives && /home/devtnascimento/.asdf/installs/cmake/3.26.1/bin/ccmake -S/home/devtnascimento/workspace/cpprojects/draw-machine/src -B/home/devtnascimento/workspace/cpprojects/draw-machine/build
+  COMMAND = cd /home/devtnascimento/workspace/cpp/draw-machine/build/primitives && /usr/bin/ccmake -S/home/devtnascimento/workspace/cpp/draw-machine -B/home/devtnascimento/workspace/cpp/draw-machine/build
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
@@ -186,21 +356,65 @@ build primitives/edit_cache: phony primitives/CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build primitives/CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/devtnascimento/workspace/cpprojects/draw-machine/build/primitives && /home/devtnascimento/.asdf/installs/cmake/3.26.1/bin/cmake --regenerate-during-build -S/home/devtnascimento/workspace/cpprojects/draw-machine/src -B/home/devtnascimento/workspace/cpprojects/draw-machine/build
+  COMMAND = cd /home/devtnascimento/workspace/cpp/draw-machine/build/primitives && /usr/bin/cmake --regenerate-during-build -S/home/devtnascimento/workspace/cpp/draw-machine -B/home/devtnascimento/workspace/cpp/draw-machine/build
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
 
 build primitives/rebuild_cache: phony primitives/CMakeFiles/rebuild_cache.util
 
+
+#############################################
+# Utility command for list_install_components
+
+build primitives/list_install_components: phony
+
+
+#############################################
+# Utility command for install
+
+build primitives/CMakeFiles/install.util: CUSTOM_COMMAND primitives/all
+  COMMAND = cd /home/devtnascimento/workspace/cpp/draw-machine/build/primitives && /usr/bin/cmake -P cmake_install.cmake
+  DESC = Install the project...
+  pool = console
+  restat = 1
+
+build primitives/install: phony primitives/CMakeFiles/install.util
+
+
+#############################################
+# Utility command for install/local
+
+build primitives/CMakeFiles/install/local.util: CUSTOM_COMMAND primitives/all
+  COMMAND = cd /home/devtnascimento/workspace/cpp/draw-machine/build/primitives && /usr/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
+  DESC = Installing only the local directory...
+  pool = console
+  restat = 1
+
+build primitives/install/local: phony primitives/CMakeFiles/install/local.util
+
+
+#############################################
+# Utility command for install/strip
+
+build primitives/CMakeFiles/install/strip.util: CUSTOM_COMMAND primitives/all
+  COMMAND = cd /home/devtnascimento/workspace/cpp/draw-machine/build/primitives && /usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+  DESC = Installing the project stripped...
+  pool = console
+  restat = 1
+
+build primitives/install/strip: phony primitives/CMakeFiles/install/strip.util
+
 # =============================================================================
 # Target aliases.
 
-build draw-machine: phony /home/devtnascimento/workspace/cpprojects/bin/draw-machine
-
 build libprimitives.a: phony primitives/libprimitives.a
 
+build libutils.a: phony utils/libutils.a
+
 build primitives: phony primitives/libprimitives.a
+
+build utils: phony utils/libutils.a
 
 # =============================================================================
 # Folder targets.
@@ -208,23 +422,23 @@ build primitives: phony primitives/libprimitives.a
 # =============================================================================
 
 #############################################
-# Folder: /home/devtnascimento/workspace/cpprojects/draw-machine/build
+# Folder: /home/devtnascimento/workspace/cpp/draw-machine/build
 
-build all: phony /home/devtnascimento/workspace/cpprojects/bin/draw-machine glad/all primitives/all
-
-# =============================================================================
-
-#############################################
-# Folder: /home/devtnascimento/workspace/cpprojects/draw-machine/build/glad
-
-build glad/all: phony
+build all: phony project_options glad external draw-machine utils/all primitives/all
 
 # =============================================================================
 
 #############################################
-# Folder: /home/devtnascimento/workspace/cpprojects/draw-machine/build/primitives
+# Folder: /home/devtnascimento/workspace/cpp/draw-machine/build/primitives
 
 build primitives/all: phony primitives/libprimitives.a
+
+# =============================================================================
+
+#############################################
+# Folder: /home/devtnascimento/workspace/cpp/draw-machine/build/utils
+
+build utils/all: phony utils/libutils.a
 
 # =============================================================================
 # Built-in targets
@@ -233,14 +447,14 @@ build primitives/all: phony primitives/libprimitives.a
 #############################################
 # Re-run CMake if any of its inputs changed.
 
-build build.ninja: RERUN_CMAKE | /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/CMakeCInformation.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/CMakeCXXInformation.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/CMakeCommonLanguageInclude.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/CMakeGenericSystem.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/CMakeInitializeConfigs.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/CMakeLanguageInformation.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/CMakeSystemSpecificInformation.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/CMakeSystemSpecificInitialize.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Compiler/CMakeCommonCompilerMacros.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Compiler/Clang-CXX.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Compiler/Clang.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Compiler/GNU-C.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Compiler/GNU.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/FindOpenGL.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/FindPackageHandleStandardArgs.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/FindPackageMessage.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Platform/Linux-Clang-CXX.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Platform/Linux-GNU-C.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Platform/Linux-GNU-CXX.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Platform/Linux-GNU.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Platform/Linux.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Platform/UnixPaths.cmake /home/devtnascimento/workspace/cpprojects/draw-machine/src/CMakeLists.txt /home/devtnascimento/workspace/cpprojects/draw-machine/src/glad/CMakeLists.txt /home/devtnascimento/workspace/cpprojects/draw-machine/src/primitives/CMakeLists.txt /usr/lib/cmake/glfw3/glfw3Config.cmake /usr/lib/cmake/glfw3/glfw3ConfigVersion.cmake /usr/lib/cmake/glfw3/glfw3Targets-noconfig.cmake /usr/lib/cmake/glfw3/glfw3Targets.cmake CMakeCache.txt CMakeFiles/3.26.1/CMakeCCompiler.cmake CMakeFiles/3.26.1/CMakeCXXCompiler.cmake CMakeFiles/3.26.1/CMakeSystem.cmake
+build build.ninja: RERUN_CMAKE | /home/devtnascimento/workspace/cpp/draw-machine/CMakeLists.txt /home/devtnascimento/workspace/cpp/draw-machine/primitives/CMakeLists.txt /home/devtnascimento/workspace/cpp/draw-machine/utils/CMakeLists.txt /usr/lib/cmake/glfw3/glfw3Config.cmake /usr/lib/cmake/glfw3/glfw3ConfigVersion.cmake /usr/lib/cmake/glfw3/glfw3Targets-noconfig.cmake /usr/lib/cmake/glfw3/glfw3Targets.cmake /usr/share/cmake/Modules/CMakeCInformation.cmake /usr/share/cmake/Modules/CMakeCXXInformation.cmake /usr/share/cmake/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake/Modules/CMakeGenericSystem.cmake /usr/share/cmake/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake/Modules/CMakeLanguageInformation.cmake /usr/share/cmake/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake/Modules/Compiler/Clang-C.cmake /usr/share/cmake/Modules/Compiler/Clang-CXX.cmake /usr/share/cmake/Modules/Compiler/Clang.cmake /usr/share/cmake/Modules/Compiler/GNU.cmake /usr/share/cmake/Modules/FindOpenGL.cmake /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake /usr/share/cmake/Modules/FindPackageMessage.cmake /usr/share/cmake/Modules/Platform/Linux-Clang-C.cmake /usr/share/cmake/Modules/Platform/Linux-Clang-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-GNU-C.cmake /usr/share/cmake/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-GNU.cmake /usr/share/cmake/Modules/Platform/Linux.cmake /usr/share/cmake/Modules/Platform/UnixPaths.cmake /usr/share/eigen3/cmake/Eigen3Config.cmake /usr/share/eigen3/cmake/Eigen3ConfigVersion.cmake /usr/share/eigen3/cmake/Eigen3Targets.cmake CMakeCache.txt CMakeFiles/3.26.2/CMakeCCompiler.cmake CMakeFiles/3.26.2/CMakeCXXCompiler.cmake CMakeFiles/3.26.2/CMakeSystem.cmake
   pool = console
 
 
 #############################################
 # A missing CMake input file is not an error.
 
-build /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/CMakeCInformation.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/CMakeCXXInformation.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/CMakeCommonLanguageInclude.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/CMakeGenericSystem.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/CMakeInitializeConfigs.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/CMakeLanguageInformation.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/CMakeSystemSpecificInformation.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/CMakeSystemSpecificInitialize.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Compiler/CMakeCommonCompilerMacros.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Compiler/Clang-CXX.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Compiler/Clang.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Compiler/GNU-C.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Compiler/GNU.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/FindOpenGL.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/FindPackageHandleStandardArgs.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/FindPackageMessage.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Platform/Linux-Clang-CXX.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Platform/Linux-GNU-C.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Platform/Linux-GNU-CXX.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Platform/Linux-GNU.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Platform/Linux.cmake /home/devtnascimento/.asdf/installs/cmake/3.26.1/share/cmake-3.26/Modules/Platform/UnixPaths.cmake /home/devtnascimento/workspace/cpprojects/draw-machine/src/CMakeLists.txt /home/devtnascimento/workspace/cpprojects/draw-machine/src/glad/CMakeLists.txt /home/devtnascimento/workspace/cpprojects/draw-machine/src/primitives/CMakeLists.txt /usr/lib/cmake/glfw3/glfw3Config.cmake /usr/lib/cmake/glfw3/glfw3ConfigVersion.cmake /usr/lib/cmake/glfw3/glfw3Targets-noconfig.cmake /usr/lib/cmake/glfw3/glfw3Targets.cmake CMakeCache.txt CMakeFiles/3.26.1/CMakeCCompiler.cmake CMakeFiles/3.26.1/CMakeCXXCompiler.cmake CMakeFiles/3.26.1/CMakeSystem.cmake: phony
+build /home/devtnascimento/workspace/cpp/draw-machine/CMakeLists.txt /home/devtnascimento/workspace/cpp/draw-machine/primitives/CMakeLists.txt /home/devtnascimento/workspace/cpp/draw-machine/utils/CMakeLists.txt /usr/lib/cmake/glfw3/glfw3Config.cmake /usr/lib/cmake/glfw3/glfw3ConfigVersion.cmake /usr/lib/cmake/glfw3/glfw3Targets-noconfig.cmake /usr/lib/cmake/glfw3/glfw3Targets.cmake /usr/share/cmake/Modules/CMakeCInformation.cmake /usr/share/cmake/Modules/CMakeCXXInformation.cmake /usr/share/cmake/Modules/CMakeCommonLanguageInclude.cmake /usr/share/cmake/Modules/CMakeGenericSystem.cmake /usr/share/cmake/Modules/CMakeInitializeConfigs.cmake /usr/share/cmake/Modules/CMakeLanguageInformation.cmake /usr/share/cmake/Modules/CMakeSystemSpecificInformation.cmake /usr/share/cmake/Modules/CMakeSystemSpecificInitialize.cmake /usr/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake /usr/share/cmake/Modules/Compiler/Clang-C.cmake /usr/share/cmake/Modules/Compiler/Clang-CXX.cmake /usr/share/cmake/Modules/Compiler/Clang.cmake /usr/share/cmake/Modules/Compiler/GNU.cmake /usr/share/cmake/Modules/FindOpenGL.cmake /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake /usr/share/cmake/Modules/FindPackageMessage.cmake /usr/share/cmake/Modules/Platform/Linux-Clang-C.cmake /usr/share/cmake/Modules/Platform/Linux-Clang-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-GNU-C.cmake /usr/share/cmake/Modules/Platform/Linux-GNU-CXX.cmake /usr/share/cmake/Modules/Platform/Linux-GNU.cmake /usr/share/cmake/Modules/Platform/Linux.cmake /usr/share/cmake/Modules/Platform/UnixPaths.cmake /usr/share/eigen3/cmake/Eigen3Config.cmake /usr/share/eigen3/cmake/Eigen3ConfigVersion.cmake /usr/share/eigen3/cmake/Eigen3Targets.cmake CMakeCache.txt CMakeFiles/3.26.2/CMakeCCompiler.cmake CMakeFiles/3.26.2/CMakeCXXCompiler.cmake CMakeFiles/3.26.2/CMakeSystem.cmake: phony
 
 
 #############################################

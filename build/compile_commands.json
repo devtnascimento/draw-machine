@@ -1,0 +1,56 @@
+[
+{
+  "directory": "/home/devtnascimento/workspace/cpp/draw-machine/build",
+  "command": "/usr/bin/clang -I/home/devtnascimento/workspace/cpp/draw-machine/include -I/home/devtnascimento/workspace/cpp/draw-machine/primitives/../include -I/home/devtnascimento/workspace/cpp/draw-machine/utils/. -I/home/devtnascimento/workspace/cpp/draw-machine/utils/../include -isystem /usr/include/eigen3 -g -o CMakeFiles/draw-machine.dir/src/glad.c.o -c /home/devtnascimento/workspace/cpp/draw-machine/src/glad.c",
+  "file": "/home/devtnascimento/workspace/cpp/draw-machine/src/glad.c",
+  "output": "CMakeFiles/draw-machine.dir/src/glad.c.o"
+},
+{
+  "directory": "/home/devtnascimento/workspace/cpp/draw-machine/build",
+  "command": "/usr/bin/clang++ -I/home/devtnascimento/workspace/cpp/draw-machine/include -I/home/devtnascimento/workspace/cpp/draw-machine/primitives/../include -I/home/devtnascimento/workspace/cpp/draw-machine/utils/. -I/home/devtnascimento/workspace/cpp/draw-machine/utils/../include -isystem /usr/include/eigen3 -g -std=gnu++2b -o CMakeFiles/draw-machine.dir/src/main.cpp.o -c /home/devtnascimento/workspace/cpp/draw-machine/src/main.cpp",
+  "file": "/home/devtnascimento/workspace/cpp/draw-machine/src/main.cpp",
+  "output": "CMakeFiles/draw-machine.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/devtnascimento/workspace/cpp/draw-machine/build",
+  "command": "/usr/bin/clang++ -I/home/devtnascimento/workspace/cpp/draw-machine/include -I/home/devtnascimento/workspace/cpp/draw-machine/primitives/../include -I/home/devtnascimento/workspace/cpp/draw-machine/utils/. -I/home/devtnascimento/workspace/cpp/draw-machine/utils/../include -isystem /usr/include/eigen3 -g -std=gnu++2b -o CMakeFiles/draw-machine.dir/src/window.cpp.o -c /home/devtnascimento/workspace/cpp/draw-machine/src/window.cpp",
+  "file": "/home/devtnascimento/workspace/cpp/draw-machine/src/window.cpp",
+  "output": "CMakeFiles/draw-machine.dir/src/window.cpp.o"
+},
+{
+  "directory": "/home/devtnascimento/workspace/cpp/draw-machine/build",
+  "command": "/usr/bin/clang++ -I/home/devtnascimento/workspace/cpp/draw-machine/utils/. -I/home/devtnascimento/workspace/cpp/draw-machine/utils/../include -isystem /usr/include/eigen3 -g -std=gnu++2b -o utils/CMakeFiles/utils.dir/movable.cpp.o -c /home/devtnascimento/workspace/cpp/draw-machine/utils/movable.cpp",
+  "file": "/home/devtnascimento/workspace/cpp/draw-machine/utils/movable.cpp",
+  "output": "utils/CMakeFiles/utils.dir/movable.cpp.o"
+},
+{
+  "directory": "/home/devtnascimento/workspace/cpp/draw-machine/build",
+  "command": "/usr/bin/clang++ -I/home/devtnascimento/workspace/cpp/draw-machine/utils/. -I/home/devtnascimento/workspace/cpp/draw-machine/utils/../include -isystem /usr/include/eigen3 -g -std=gnu++2b -o utils/CMakeFiles/utils.dir/shaders.cpp.o -c /home/devtnascimento/workspace/cpp/draw-machine/utils/shaders.cpp",
+  "file": "/home/devtnascimento/workspace/cpp/draw-machine/utils/shaders.cpp",
+  "output": "utils/CMakeFiles/utils.dir/shaders.cpp.o"
+},
+{
+  "directory": "/home/devtnascimento/workspace/cpp/draw-machine/build",
+  "command": "/usr/bin/clang++ -I/home/devtnascimento/workspace/cpp/draw-machine/utils/. -I/home/devtnascimento/workspace/cpp/draw-machine/utils/../include -isystem /usr/include/eigen3 -g -std=gnu++2b -o utils/CMakeFiles/utils.dir/texture.cpp.o -c /home/devtnascimento/workspace/cpp/draw-machine/utils/texture.cpp",
+  "file": "/home/devtnascimento/workspace/cpp/draw-machine/utils/texture.cpp",
+  "output": "utils/CMakeFiles/utils.dir/texture.cpp.o"
+},
+{
+  "directory": "/home/devtnascimento/workspace/cpp/draw-machine/build",
+  "command": "/usr/bin/clang++ -I/home/devtnascimento/workspace/cpp/draw-machine/utils/. -I/home/devtnascimento/workspace/cpp/draw-machine/utils/../include -isystem /usr/include/eigen3 -g -std=gnu++2b -o utils/CMakeFiles/utils.dir/vertices.cpp.o -c /home/devtnascimento/workspace/cpp/draw-machine/utils/vertices.cpp",
+  "file": "/home/devtnascimento/workspace/cpp/draw-machine/utils/vertices.cpp",
+  "output": "utils/CMakeFiles/utils.dir/vertices.cpp.o"
+},
+{
+  "directory": "/home/devtnascimento/workspace/cpp/draw-machine/build",
+  "command": "/usr/bin/clang++ -I/home/devtnascimento/workspace/cpp/draw-machine/primitives/../include -I/home/devtnascimento/workspace/cpp/draw-machine/utils/. -I/home/devtnascimento/workspace/cpp/draw-machine/utils/../include -isystem /usr/include/eigen3 -g -std=gnu++2b -o primitives/CMakeFiles/primitives.dir/shape.cpp.o -c /home/devtnascimento/workspace/cpp/draw-machine/primitives/shape.cpp",
+  "file": "/home/devtnascimento/workspace/cpp/draw-machine/primitives/shape.cpp",
+  "output": "primitives/CMakeFiles/primitives.dir/shape.cpp.o"
+},
+{
+  "directory": "/home/devtnascimento/workspace/cpp/draw-machine/build",
+  "command": "/usr/bin/clang++ -I/home/devtnascimento/workspace/cpp/draw-machine/primitives/../include -I/home/devtnascimento/workspace/cpp/draw-machine/utils/. -I/home/devtnascimento/workspace/cpp/draw-machine/utils/../include -isystem /usr/include/eigen3 -g -std=gnu++2b -o primitives/CMakeFiles/primitives.dir/triangle.cpp.o -c /home/devtnascimento/workspace/cpp/draw-machine/primitives/triangle.cpp",
+  "file": "/home/devtnascimento/workspace/cpp/draw-machine/primitives/triangle.cpp",
+  "output": "primitives/CMakeFiles/primitives.dir/triangle.cpp.o"
+}
+]

@@ -3,14 +3,14 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "window.cpp"
-#include "primitives/Triangle.cpp"
-#include "primitives/drawable.cpp"
-#include "primitives/shape.cpp"
 #include <filesystem>
-#include "utils/vertices.cpp"
 #include <array>
 #include <Eigen/Geometry>
+
+#include <primitives/triangle.h>
+#include <primitives/drawable.h>
+#include <primitives/shape.h>
+#include <window.h>
 
 namespace fs = std::filesystem;
 
@@ -18,7 +18,7 @@ using namespace std;
 
 int main(){
 
-    Window window = Window(800, 800);
+    auto window = Window(800, 800);
     float v[] = {
             // positions          // texture coords
             0.5f,  0.5f, 0.0f,   1.0f, 1.0f, // top right
@@ -26,8 +26,6 @@ int main(){
             -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, // bottom left
             -0.5f,  0.5f, 0.0f,   0.0f, 1.0f  // top left
     };
-
-    cout << "v: " << sizeof (v) << endl;
 
     Vertices vertices(4, 5);
     vertices  <<  0.5f, 0.5f, 0.0f, 1.0f, 1.0f,
@@ -43,7 +41,7 @@ int main(){
         cout << i << " ";
     }
     cout << endl;
-    cout << "vertices: " << vertices.size()*sizeof(float) << endl;
+    cout << "vertices: " << vertices.size() * sizeof(float) << endl;
 
     Indices indices(2, 3);
     indices <<  0, 1, 3,
@@ -65,13 +63,13 @@ int main(){
 
 
     cout << "CURRENT_PATH: " << fs::current_path() << endl;
-    string vs_path = "../shaders/vertexT.glsl";
-    string fs_path = "../shaders/fragmentT.glsl";
+    string vs_path = "../src/shaders/vertexT.glsl";
+    string fs_path = "../src/shaders/fragmentT.glsl";
 
     if (!window.init())
         return -1;
 
-    vector<Drawable*> drawables;
+    vector<primitive::Drawable*> drawables;
 
     auto* my_shape = new primitive::Shape(vertices, indices, vs_path, fs_path);
 
