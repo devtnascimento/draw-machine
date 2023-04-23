@@ -2,7 +2,10 @@ cmake_minimum_required(VERSION 3.15)
 
 project(utils)
 
-file(GLOB utils_sources ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+file(GLOB utils_sources 
+        ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/../include/utils/*
+)
 
 add_library(utils ${utils_sources})
 

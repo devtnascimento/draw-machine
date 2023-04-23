@@ -3,8 +3,10 @@
 using namespace std;
 
 
-primitive::Shape::Shape(const Vertices& vertices, const Indices& indices,
-        const string& vs_path, const string& fs_path) {
+primitive::Shape::Shape(
+    const Vertices& vertices, const Indices& indices,
+    const string& vs_path, const string& fs_path
+) {
 
     this->vertices = vertices;
     this->size = static_cast<GLsizeiptr>(vertices.size()*sizeof(float));
@@ -18,6 +20,7 @@ primitive::Shape::Shape(const Vertices& vertices, const Indices& indices,
     this->texture1 = new utils::Texture("container", GL_RGB);
     this->texture2 = new utils::Texture("awesomeface", GL_RGBA, true);
     this->T = Transform::Identity();
+    this->glm_mat4 = glm::mat4(1.0f);
     this->center = this->vertices.block(0, 0, this->vertices.rows(), 3).colwise().mean();
 }
 
@@ -26,8 +29,7 @@ void primitive::Shape::build () {
     this->getShadersSources();
     this->compileShaders();
     this->linkProgram();
-
-    cout << this->T << endl;
+    
     glGenVertexArrays(1, &this->VAO);
     glGenBuffers(1, &this->VBO);
     glGenBuffers(1, &this->EBO);
@@ -62,14 +64,7 @@ void primitive::Shape::draw() {
     glBindTexture(GL_TEXTURE_2D, this->texture1->id);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, this->texture2->id);
-
-    this->translate(Eigen::Vector3f(0.5f, -0.5f, 0.0f));
-    float angle = 45.0f;
-    this->rotate(angle, Eigen::Vector3f(0.0f, 0.0f, 1.0f));
-
-    glUseProgram(this->program);
-    GLint transformLoc = glGetUniformLocation(this->program, "transform");
-    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, this->T.data());
+    this->move();
     glBindVertexArray(this->VAO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }
@@ -84,7 +79,6 @@ void primitive::Shape::translate(const Eigen::Vector3f& point) {
 
 void primitive::Shape::rotate(float angle, Eigen::Vector3f axis) {
 
-    angle = static_cast<float>(angle * M_PI / 180.0f);
     Eigen::Quaternionf rotation = Eigen::Quaternionf(Eigen::AngleAxisf(angle, axis));
     Eigen::Affine3f transform(this->T);
     transform.rotate(rotation);
@@ -92,8 +86,7 @@ void primitive::Shape::rotate(float angle, Eigen::Vector3f axis) {
 }
 
 void primitive::Shape::rotate(float angle) {
-
-    angle = static_cast<float>(angle * M_PI / 180.0f);
+    
     auto rotation = Eigen::Quaternionf(Eigen::AngleAxisf(angle, this->center.normalized()));
     Eigen::Affine3f transform(this->T);
     transform.rotate(rotation);
@@ -102,16 +95,17 @@ void primitive::Shape::rotate(float angle) {
 
 void primitive::Shape::move() {
 
-    for (int i=0; i < this->vertices.rows(); i++){
-        Eigen::Vector4f new_vertex;
-        new_vertex = this->T * Eigen::Vector4f(this->vertices(i, 0),
-                                                this->vertices(i, 1),
-                                                this->vertices(i, 2),
-                                                1.0f
-        );
-        this->vertices(i, 0) = new_vertex[0];
-        this->vertices(i, 1) = new_vertex[1];
-        this->vertices(i, 2) = new_vertex[2];
-        this->vertices = this->vertices.normalized();
+    this->T = Transform::Identity();
+    this->translate(Eigen::Vector3f(0.5f, -0.5f, 0.0f));
+    this->rotate((float)glfwGetTime(), Eigen::Vector3f(0.0f, 0.0f, 1.0f));
+
+    glUseProgram(this->program);
+    GLint transformLoc = glGetUniformLocation(this->program, "transform");
+
+    if (transformLoc < 0) {
+        cout << "PROGRAM: " << this->program << endl;
+        cout << "TRANSFORMLOCK: " << transformLoc << endl;
+        throw runtime_error("Could not get transformLoc");
     }
+    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, this->T.data());
 }

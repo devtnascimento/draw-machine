@@ -28,6 +28,7 @@ namespace primitive {
         Triangle();
         void draw() override;
         void build() override;
+        void getLog() override;
 
     protected:
         GLsizeiptr size{};
@@ -37,7 +38,6 @@ namespace primitive {
         void compileShaders();
         void deleteShaders();
         void linkProgram();
-        void getLog() override;
         void setLog(const unsigned int &object, const std::string &log_type) override;
     };
 }

@@ -36,18 +36,21 @@ bool Window::init(){
   return true;
 }
 
-void Window::event_loop(vector<primitive::Drawable*> &drawables, int &control_flow){
+void Window::event_loop(ModelCollection<primitive::Shape>& shapes, int& control_flow) {
+
   unsigned int cont = 0;
-  while(!glfwWindowShouldClose(window)){
-      glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-      glClear(GL_COLOR_BUFFER_BIT);
-      for (auto &drawable : drawables) {
-          drawable->draw();
-      }
-      glfwSwapBuffers(window);
-      glfwPollEvents();
-      if (control_flow != is_infinity)
-          break;
+  while(!glfwWindowShouldClose(window)) {
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    for (auto shape : shapes) {
+      shape->draw();
+    }
+    
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+    if (control_flow != is_infinity)
+        break;
   }
 }
 

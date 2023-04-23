@@ -1,4 +1,5 @@
 #include <primitives/triangle.h>
+#include <stdexcept>
 
 using namespace std;
 
@@ -90,6 +91,18 @@ void primitive::Triangle::getLog() {
 }
 
 void primitive::Triangle::setLog(const unsigned int &object, const string &log_type) {
+
+    GLint infoLogLength;
+    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
+
+    if (infoLogLength > 0) {
+        char* infoLog = new char[infoLogLength];
+        glGetProgramInfoLog(program, infoLogLength, NULL, infoLog);
+        cerr << "Program link error: " << infoLog << endl;
+        delete[] infoLog;
+        throw runtime_error("OPENGL ERROR");
+    }
+
     int success;
     if (log_type == "PROGRAM") {
         char infoLog[512];
@@ -116,25 +129,25 @@ void primitive::Triangle::setLog(const unsigned int &object, const string &log_t
             if (error != GL_NO_ERROR) {
                 switch (error) {
                     case GL_INVALID_ENUM:
-                        std::cerr << "OpenGL error: Invalid enum" << std::endl;
+                        cerr << "OpenGL error: Invalid enum" << std::endl;
                         break;
                     case GL_INVALID_VALUE:
-                        std::cerr << "OpenGL error: Invalid value" << std::endl;
+                        cerr << "OpenGL error: Invalid value" << std::endl;
                         break;
                     case GL_INVALID_OPERATION:
-                        std::cerr << "OpenGL error: Invalid operation" << std::endl;
+                        cerr << "OpenGL error: Invalid operation" << std::endl;
                         break;
                     case GL_STACK_OVERFLOW:
-                        std::cerr << "OpenGL error: Stack overflow" << std::endl;
+                        cerr << "OpenGL error: Stack overflow" << std::endl;
                         break;
                     case GL_STACK_UNDERFLOW:
-                        std::cerr << "OpenGL error: Stack underflow" << std::endl;
+                        cerr << "OpenGL error: Stack underflow" << std::endl;
                         break;
                     case GL_OUT_OF_MEMORY:
-                        std::cerr << "OpenGL error: Out of memory" << std::endl;
+                        cerr << "OpenGL error: Out of memory" << std::endl;
                         break;
                     default:
-                        std::cerr << "Unknown OpenGL error" << std::endl;
+                        cerr << "Unknown OpenGL error" << std::endl;
                         break;
                 }
             }

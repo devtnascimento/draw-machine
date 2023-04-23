@@ -1,11 +1,6 @@
-#ifndef DRAW_MACHINE_TEXTURE_H
-#define DRAW_MACHINE_TEXTURE_H
+#pragma once
 
-#include <glad/glad.h>
-#include <dirent.h>
-#include <algorithm>
-#include <iostream>
-#include <external/stb_image.h>
+#include <utils/model.h>
 
 namespace utils {
     class Texture {
@@ -17,7 +12,7 @@ namespace utils {
     private:
         const bool flip;
         const int format{};
-        std::string path = "../static/textures";
+        std::string path = PATH + "/static/textures";
         const char* name{};
         std::string filename{};
         int width{}, height{}, channels{};
@@ -30,9 +25,3 @@ namespace utils {
         void generate();
     };  
 }
-
-
-#endif
-
-
-
